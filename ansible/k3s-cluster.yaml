@@ -1,0 +1,47 @@
+
+---
+- name: Install k3s on master node
+  hosts: master
+  become: yes
+  vars:
+    k3s_version: "v1.0.0"
+  tasks:
+    - name: Download k3s install script
+      get_url:
+        url: https://get.k3s.io
+        dest: /tmp/install_k3s.sh
+        mode: 'u+x'
+    
+    - name: Install k3s master
+      command: sh /tmp/install_k3s.sh
+
+- name: Install k3s on worker nodes
+  hosts: node
+  become: yes
+  vars:
+    k3s_version: "v1.0.0"
+    k3s_token: "{{ hostvars['master-node']['k3s_token'] }}"
+    k3s_master_url: "https://{{ hostvars['master-node']['ansible_host'] }}:6443"
+  tasks:
+    - name: Download k3s install script
+      get_url:
+        url: https://get.k3s.io
+        dest: /tmp/install_k3s.sh
+        mode: 'u+x'
+    
+    - name: Install k3s node
+      command: sh /tmp/install_k3s.sh --token {{ k3s_token }} --server {{ k3s_master_url }}
+
+  handlers:
+    - name: Get k3s token from master
+      become: yes
+      command: cat /var/lib/rancher/k3s/server/node-token
+      run_once: true
+      delegate_to: master-node
+      register: k3s_token_result
+      changed_when: false
+    
+    - name: Set k3s token
+      set_fact:
+        k3s_token: "{{ k3s_token_result.stdout }}"
+      when: k3s_token_result is defined

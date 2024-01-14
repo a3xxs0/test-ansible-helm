@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "db.fullname" . }}
+  namespace: data
+spec:
+  podSelector:
+    matchLabels:
+      db: {{ include "db.name" . }}
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: app

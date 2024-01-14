@@ -1,0 +1,17 @@
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "web.fullname" . }}
+  namespace: web
+spec:
+  podSelector:
+    matchLabels:
+      app: {{ include "web.name" . }}
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: app

@@ -1,0 +1,35 @@
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: index-html-configmap
+  namespace: app
+data:
+  index.html: |
+    <html>
+    <h1>Welcome to APP</h1>
+    </br>
+    <h1>App</h1>
+    <p>Go to web <a href="http://web.web.svc.cluster.local">click</a></p>
+    <p>Go to db <a href="http://app.app.svc.cluster.local">click</a></p>
+    </html
+
+  # default.conf: |-
+  #   server {
+  #     listen       80;
+  #     server_name  localhost;
+
+  #     location / {
+  #       root   /usr/share/nginx/html;
+  #       index  index.html index.htm;
+  #       }
+
+  #     location /app/db {
+  #       proxy_pass http://db.db.svc.cluster.local;
+  #     }
+
+  #     error_page   500 502 503 504  /50x.html;
+  #     location = /50x.html {
+  #         root   /usr/share/nginx/html;
+  #       }
+  #   }

@@ -1,0 +1,15 @@
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: index-html-configmap
+  namespace: data
+data:
+  index.html: |
+    <html>
+    <h1>Welcome to DB</h1>
+    </br>
+    <h1>DB</h1>
+    <p>Go to web <a href="http://web.web.svc.cluster.local">click</a></p>
+    <p>Go to app <a href="http://app.app.svc.cluster.local">click</a></p>
+    </html
